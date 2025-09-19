@@ -20,6 +20,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll() // Allow auth endpoints
                         .requestMatchers("/api/user/cars").permitAll()
                         .requestMatchers("/api/admin/cars/**").permitAll()
+                        .requestMatchers("/api/auth/usersList/**").permitAll()
                         .anyRequest().authenticated()               // All other requests need authentication
                 )
                 .httpBasic(Customizer.withDefaults()); // Use basic auth for simplicity

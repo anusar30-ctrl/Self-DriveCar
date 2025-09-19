@@ -7,6 +7,9 @@ import com.car_rental.Car_Builder.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -26,6 +29,7 @@ public class AuthController {
     public String register(@RequestBody User user) {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRole("USER");
+        user.setEmailId(user.getEmailId());
         userRepo.save(user);
         return "User registered!";
     }
@@ -39,4 +43,23 @@ public class AuthController {
         }
         throw new RuntimeException("Invalid credentials");
     }
+
+    @GetMapping("/usersList")
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    @GetMapping("/usersList/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
+
+
+    @GetMapping("/usersList/emailid/{emailId}")
+    public User getUserByEmail(@PathVariable String emailId) {
+        return userRepo.findByEmailId(emailId)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + emailId));
+    }
+
 }
